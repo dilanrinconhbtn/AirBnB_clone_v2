@@ -20,8 +20,6 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-
-
     def delete(self, obj=None):
         """delete obj from __objects if it’s inside
         """
@@ -44,10 +42,11 @@ class FileStorage:
             N_dictionary = {}
             for name_class in self.__objects:
                 if cls.__name__ in name_class:
-                   N_dictionary.update({name_class:self.__objects[name_class]})
+                    N_dictionary.update({name_class:
+                                        self.__objects[name_class]})
             return N_dictionary
         else:
-            return
+            return self.__objects
 
     def new(self, obj):
         """sets __object to given obj

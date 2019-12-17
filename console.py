@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This is the console for AirBnB"""
+
 import cmd
 from models import storage
 from datetime import datetime
@@ -10,7 +11,10 @@ from models.city import City
 from models.amenity import Amenity
 from models.place import Place
 from models.review import Review
-from shlex import split
+import shlex
+
+classes = {'BaseModel': BaseModel, 'User': User, 'State': State, 'City': City,
+           'Amenity': Amenity, 'Place': Place, 'Review': Review}
 
 
 class HBNBCommand(cmd.Cmd):
@@ -32,23 +36,32 @@ class HBNBCommand(cmd.Cmd):
         """Quit command to exit the program at end of file"""
         return True
 
-    def do_create(self, line):
+    def do_create(self, args):
         """Creates a new instance of BaseModel, saves it
         Exceptions:
             SyntaxError: when there is no args given
             NameError: when there is no object taht has the name
         """
-        try:
-            if not line:
-                raise SyntaxError()
-            my_list = line.split(" ")
-            obj = eval("{}()".format(my_list[0]))
-            obj.save()
-            print("{}".format(obj.id))
-        except SyntaxError:
+        if args is None or len(args) == 0:
             print("** class name missing **")
-        except NameError:
-            print("** class doesn't exist **")
+        else:
+            new_list = shlex.split(args)
+            if new_list[0] in classes and len(new_list) == 1:
+                obj = eval(str(args) + "()")
+                obj.save()
+                print(obj.id)
+            elif new_list[0] in classes and len(new_list) > 1:
+                obj = eval(str(new_list[0]) + "()")
+                params = dict(arg.split('=') for arg in new_list[1:])
+                for key, value in params.items():
+                    if '_' in value:
+                        value = value.replace('_', ' ')
+                    if hasattr(obj, key):
+                        setattr(obj, key, value)
+                obj.save()
+                print(obj.id)
+            else:
+                print("** class doesn't exist **")
 
     def do_show(self, line):
         """Prints the string representation of an instance
