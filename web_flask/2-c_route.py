@@ -19,5 +19,11 @@ def hbnb():
     return 'HBNB'
 
 
+@app.route('/c/<text>')
+def c(text):
+    """ Message """
+    words = text.replace('_', ' ')
+    return 'C {}'.format(words)
+
 if __name__ == '__main__':
     app.run()
