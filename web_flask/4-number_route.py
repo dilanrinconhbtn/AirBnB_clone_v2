@@ -34,6 +34,13 @@ def hello_py(text='is cool'):
     return 'Python {}'.format(words)
 
 
+@app.route('/number/<int:number>')
+def is_number(number):
+    """ Is a Number """
+    if type(number) is int:
+        return '{} is a number'.format(number)
+
+
 if __name__ == '__main__':
     app.run()
     
