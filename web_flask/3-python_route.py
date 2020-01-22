@@ -36,4 +36,3 @@ def hello_py(text='is cool'):
 
 if __name__ == '__main__':
     app.run()
-    
